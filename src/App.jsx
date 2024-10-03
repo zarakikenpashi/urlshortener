@@ -8,13 +8,9 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [shortendUrl, setShortenedUrl] = useState('')
 
-
-
   const handleChange = (e) => {
     setUrl(e.target.value)
   }
-
-
 
   const handleShortenedUrl = async (e) => {
     e.preventDefault();
@@ -33,15 +29,15 @@ const App = () => {
   }
 
   return (
-    <div className="font-okomito h-screen w-full flex items-center justify-center bg-[#f2f2fb]">
-      <div className="main-box md:h-full md:w-[65%] px-[1rem] flex flex-col justify-between pt-[5rem]">
+    <div className="font-okomito h-screen w-sreen overflow-hidden  bg-[#f2f2fb] lg:flex lg:items-center lg:justify-center">
+      <div className="main-box h-full lg:w-[65%] px-[1rem] flex flex-col justify-between lg:pt-[5rem] py-4">
         <header className="text-center">
           <h1 className="capitalize text-5xl font-black lg:text-7xl">créer une URL courte !</h1>
           <p className="pt-[1rem]">Site Web rapide et simple pour créer une URL raccourcie, facile à retenir et à partager</p>
         </header>
         
-        <div className="card shadow-lg shadow-slate-500/40 p-[1rem] rounded-md bg-[#f3f5fb] md:px-[5rem] lg:py-[5rem]">
-          <form action="" method="get" className="flex gap-4" onSubmit={handleShortenedUrl}>
+        <div className="card shadow-lg shadow-slate-500/40 p-[1rem] rounded-md bg-[#f3f5fb] lg:px-[5rem] lg:py-[3rem] xl:py-[5rem]">
+          <form action="" method="get" className="flex gap-4 flex-col lg:flex-row" onSubmit={handleShortenedUrl}>
             <input 
               type="text"  
               className="p-[.5rem] outline-none rounded-md flex-1 focus:ring-blue-500 focus:ring-1"

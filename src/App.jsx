@@ -1,9 +1,14 @@
-import axios from "axios"
-import { useState } from "react"
+import { useState } from "react";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
+const accessToken = 'ca6e16f9a3e5de1f79266851dbd4265fee544279';
+const apiUrl = 'https://api-ssl.bitly.com/v4/shorten';
 
 const App = () => {
   const [url, setUrl] = useState('')
   const [shortendUrl, setShortenedUrl] = useState('')
+
+
 
   const handleChange = (e) => {
     setUrl(e.target.value)
@@ -14,48 +19,65 @@ const App = () => {
   const handleShortenedUrl = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios(`https://api.shrtco.de/v2/shorten?url=${url}`);
-      setShortenedUrl(response.data.result.full_short_link);
-    } catch (e) {
-      console.log(e);
-    }
-
-    console.log(url);
-    
-
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ long_url: url }),
+    })
+    .then(response => response.json())
+    .then(data => setShortenedUrl(data.link))
+    .catch(error => console.error(error));
   }
+
   return (
     <div className="font-okomito h-screen w-full flex items-center justify-center bg-[#f2f2fb]">
-      <div className="main-box md:h-[75%] md:w-[65%] px-[1rem]">
+      <div className="main-box md:h-full md:w-[65%] px-[1rem] flex flex-col justify-between pt-[5rem]">
         <header className="text-center">
-          <h1 className="capitalize text-5xl font-black lg:text-7xl">create short URL!</h1>
-          <p className="pt-[1rem]">Fast and simple website to create a shortener URL, easy to remember and share</p>
+          <h1 className="capitalize text-5xl font-black lg:text-7xl">créer une URL courte !</h1>
+          <p className="pt-[1rem]">Site Web rapide et simple pour créer une URL raccourcie, facile à retenir et à partager</p>
         </header>
         
-        <div className="card shadow-lg shadow-slate-500/40 mt-[5rem] p-[1rem] rounded-md bg-[#f3f5fb] md:px-[5rem] lg:py-[5rem]">
+        <div className="card shadow-lg shadow-slate-500/40 p-[1rem] rounded-md bg-[#f3f5fb] md:px-[5rem] lg:py-[5rem]">
           <form action="" method="get" className="flex gap-4" onSubmit={handleShortenedUrl}>
             <input 
               type="text"  
               className="p-[.5rem] outline-none rounded-md flex-1 focus:ring-blue-500 focus:ring-1"
-              placeholder="https://www.example.com"
+              placeholder="https://www.exemple.com"
               value={url}
               onChange={handleChange}
             />
             <button 
               type="submit"
               className="bg-blue-500 px-[1rem] rounded-md text-white hover:bg-blue-700"
-            >Get Short URL</button>
+            >Obtenir une URL courte</button>
           </form>
           {
             shortendUrl 
-            ? (
-              <div>Hello {shortendUrl}</div>
-            )
-            : null
+            && 
+              <div className="px-[5px] py-[1rem] border my-[1rem] flex justify-between items-center">
+                <CopyToClipboard text={shortendUrl} >
+                  <button 
+                    className="px-[1rem] py-[.5rem] rounded-md border border-green-500 hover:bg-green-500"
+                    onClick={() => alert("l'URL a bien été copieé!")}
+                  >Copy URL</button>
+                </CopyToClipboard>
+
+
+                <div>{shortendUrl}</div>
+              </div>
+            
           }
         </div>
+        <footer className="bg-white rounded-md flex justify-between p-[.5rem]">
+         <div>© 2024 Yodaime hokage</div>
+         <div className="text-blue-500 font-bold">Harigato!</div>
+        </footer>
       </div>
+
+
       
     </div>
   )
